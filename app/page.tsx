@@ -33,7 +33,7 @@ export default function LandingPage() {
           </motion.div>
           <div className="hidden md:flex space-x-8 font-medium text-slate-600">
             <a href="#features" className="hover:text-blue-600 transition">Features</a>
-            <a href="#benefits" className="hover:text-blue-600 transition">Benefits</a>
+            <a href="#stories" className="hover:text-blue-600 transition">Stories</a>
           </div>
           <motion.button 
             whileHover={{ scale: 1.05 }}
@@ -82,7 +82,7 @@ export default function LandingPage() {
         </motion.div>
       </header>
 
-      {/* Features Grid with Icons */}
+      {/* Features Grid */}
       <section id="features" className="bg-slate-50 py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -118,6 +118,47 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Success Stories Section */}
+      <section id="stories" className="py-24 px-6 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInVariants}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4 tracking-tight">Success Stories</h2>
+            <p className="text-slate-500 text-lg">See how StudentMentor has changed the trajectory for students worldwide.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              { name: "Sarah Jenkins", role: "Frontend Dev @ TechCo", text: "The 1-on-1 mentorship was the turning point in my career. My mentor helped me land a job I didn't think I was qualified for." },
+              { name: "David Chen", role: "Computer Science Junior", text: "The guided projects gave me a portfolio that actually impressed recruiters. It's much better than just doing online courses." },
+              { name: "Amara Okafor", role: "UX Design Student", text: "Finally, a place where I can get real feedback from people working in the industry. The community is so supportive." }
+            ].map((testimonial, i) => (
+              <motion.div 
+                key={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInVariants}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="p-8 rounded-3xl border border-slate-100 bg-slate-50/50 flex flex-col justify-between shadow-sm hover:shadow-md transition-all"
+              >
+                <p className="text-slate-600 italic mb-8 leading-relaxed">"{testimonial.text}"</p>
+                <div>
+                  <div className="font-bold text-slate-900">{testimonial.name}</div>
+                  <div className="text-sm text-blue-600 font-medium">{testimonial.role}</div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-24 px-6 text-center">
         <motion.div 
@@ -148,7 +189,6 @@ export default function LandingPage() {
   );
 }
 
-// Helper Component for Features
 function FeatureCard({ icon, title, desc, delay }: { icon: React.ReactNode, title: string, desc: string, delay: number }) {
   return (
     <motion.div 
