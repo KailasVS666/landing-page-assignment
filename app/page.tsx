@@ -1,14 +1,21 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Rocket, 
-  Globe, 
-  CheckCircle2, 
-  ArrowRight, 
-  GraduationCap 
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Users,
+  Rocket,
+  Globe,
+  CheckCircle2,
+  ArrowRight,
+  GraduationCap,
+  Menu,
+  X,
+  ChevronDown,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram
 } from 'lucide-react';
 
 // Animation settings
@@ -18,6 +25,28 @@ const fadeInVariants = {
 };
 
 export default function LandingPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const faqItems = [
+    {
+      q: "How do I pick the right mentor?",
+      a: "Browse mentor profiles, filter by skills and industry, then book a discovery call to confirm the fit before committing.",
+    },
+    {
+      q: "Can I cancel or reschedule sessions?",
+      a: "Yes. You can reschedule up to 12 hours before a session or cancel anytime with unused credits returned.",
+    },
+    {
+      q: "Do mentors provide projects?",
+      a: "Most mentors offer guided projects with feedback so you can add real, portfolio-ready work to your resume.",
+    },
+    {
+      q: "Is there a free plan?",
+      a: "You can start with a free account, explore mentors, and join community events before upgrading to paid sessions.",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-white font-sans antialiased text-slate-900 scroll-smooth">
       {/* Navbar with Glassmorphism */}
@@ -34,16 +63,86 @@ export default function LandingPage() {
           <div className="hidden md:flex space-x-8 font-medium text-slate-600">
             <a href="#features" className="hover:text-blue-600 transition">Features</a>
             <a href="#stories" className="hover:text-blue-600 transition">Stories</a>
+            <a href="#faq" className="hover:text-blue-600 transition">FAQ</a>
           </div>
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-blue-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition shadow-md shadow-blue-100"
-          >
-            Get Started
-          </motion.button>
+          <div className="flex items-center gap-3">
+            <motion.a 
+              href="/signup"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="hidden md:inline-flex bg-blue-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition shadow-md shadow-blue-100"
+            >
+              Get Started
+            </motion.a>
+            <button
+              aria-label="Open menu"
+              className="md:hidden p-2 rounded-full border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition"
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <Menu className="w-6 h-6 text-slate-700" />
+            </button>
+          </div>
         </div>
       </nav>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="ml-auto h-full w-72 bg-white shadow-2xl flex flex-col p-6 gap-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xl font-bold text-blue-600">
+                  <GraduationCap className="w-6 h-6" />
+                  <span>StudentMentor</span>
+                </div>
+                <button
+                  aria-label="Close menu"
+                  className="p-2 rounded-full border border-slate-200 hover:border-blue-300 hover:bg-blue-50 transition"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <X className="w-5 h-5 text-slate-700" />
+                </button>
+              </div>
+              <div className="flex flex-col gap-4 text-slate-700 font-semibold">
+                {[
+                  { href: "#features", label: "Features" },
+                  { href: "#stories", label: "Stories" },
+                  { href: "#faq", label: "FAQ" },
+                ].map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+              <motion.a
+                href="/signup"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-auto bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-100 text-center"
+              >
+                Get Started
+              </motion.a>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero Section */}
       <header className="px-6 py-20 md:py-32 text-center max-w-5xl mx-auto">
@@ -64,20 +163,22 @@ export default function LandingPage() {
             The all-in-one platform for students to bridge the gap between education and industry. Build skills that matter.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <motion.button 
+            <motion.a 
+              href="/signup"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-slate-900 text-white px-10 py-4 rounded-2xl text-lg font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+              className="bg-slate-900 text-white px-10 py-4 rounded-2xl text-lg font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-300/40"
             >
               Join Now <ArrowRight className="w-5 h-5" />
-            </motion.button>
-            <motion.button 
+            </motion.a>
+            <motion.a 
+              href="/mentors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="border-2 border-slate-200 px-10 py-4 rounded-2xl text-lg font-bold hover:bg-slate-50 transition-all"
+              className="border-2 border-slate-200 px-10 py-4 rounded-2xl text-lg font-bold hover:bg-slate-50 transition-all shadow-lg shadow-blue-100/60"
             >
               View Mentors
-            </motion.button>
+            </motion.a>
           </div>
         </motion.div>
       </header>
@@ -148,13 +249,70 @@ export default function LandingPage() {
                 whileHover={{ y: -5 }}
                 className="p-8 rounded-3xl border border-slate-100 bg-slate-50/50 flex flex-col justify-between shadow-sm hover:shadow-md transition-all"
               >
-                <p className="text-slate-600 italic mb-8 leading-relaxed">"{testimonial.text}"</p>
+                <p className="text-slate-600 italic mb-8 leading-relaxed">&quot;{testimonial.text}&quot;</p>
                 <div>
                   <div className="font-bold text-slate-900">{testimonial.name}</div>
                   <div className="text-sm text-blue-600 font-medium">{testimonial.role}</div>
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="bg-slate-50 py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInVariants}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+            <p className="text-slate-500 text-lg">Quick answers to help you get started with confidence.</p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {faqItems.map((item, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <motion.div
+                  key={item.q}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeInVariants}
+                  className="rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all"
+                >
+                  <button
+                    className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left"
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className="text-lg font-semibold text-slate-900">{item.q}</span>
+                    <motion.div animate={{ rotate: isOpen ? 180 : 0 }}>
+                      <ChevronDown className="w-5 h-5 text-slate-500" />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="px-6 pb-5 text-slate-600 leading-relaxed"
+                      >
+                        {item.a}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -171,19 +329,68 @@ export default function LandingPage() {
           <p className="text-blue-100 text-lg mb-10 max-w-lg mx-auto leading-relaxed">
             Take the first step toward your dream career today. Join StudentMentor for free.
           </p>
-          <motion.button 
+          <motion.a 
+            href="/signup"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-white text-blue-600 px-12 py-5 rounded-2xl text-xl font-extrabold hover:bg-slate-50"
+            className="inline-flex justify-center bg-white text-blue-600 px-12 py-5 rounded-2xl text-xl font-extrabold hover:bg-slate-50 shadow-lg shadow-blue-200/80"
           >
             Create Free Account
-          </motion.button>
+          </motion.a>
         </motion.div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 text-center text-slate-400 text-sm border-t border-slate-100">
-        <p>© 2025 StudentMentor. Built with Next.js and Tailwind CSS.</p>
+      <footer className="bg-slate-900 text-slate-100 py-16 px-6">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-12">
+          <div className="md:col-span-2 space-y-4">
+            <div className="flex items-center gap-2 text-2xl font-bold text-white tracking-tight">
+              <GraduationCap className="w-8 h-8" />
+              <span>StudentMentor</span>
+            </div>
+            <p className="text-slate-300 leading-relaxed">
+              Bridge the gap between education and industry with verified mentors, guided projects, and a community built for ambitious learners.
+            </p>
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Product</h3>
+            <ul className="space-y-2 text-slate-300">
+              <li><a className="hover:text-white transition" href="#features">Features</a></li>
+              <li><a className="hover:text-white transition" href="#stories">Success Stories</a></li>
+              <li><a className="hover:text-white transition" href="#faq">FAQ</a></li>
+            </ul>
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Company</h3>
+            <ul className="space-y-2 text-slate-300">
+              <li><a className="hover:text-white transition" href="/about">About</a></li>
+              <li><a className="hover:text-white transition" href="/careers">Careers</a></li>
+              <li><a className="hover:text-white transition" href="/blog">Blog</a></li>
+            </ul>
+          </div>
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Legal</h3>
+            <ul className="space-y-2 text-slate-300">
+              <li><a className="hover:text-white transition" href="/terms">Terms</a></li>
+              <li><a className="hover:text-white transition" href="/privacy">Privacy</a></li>
+              <li><a className="hover:text-white transition" href="/cookies">Cookies</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto mt-10 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-slate-800 pt-6">
+          <p className="text-sm text-slate-400">© 2025 StudentMentor. Built with Next.js and Tailwind CSS.</p>
+          <div className="flex items-center gap-3">
+            {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
+              <a
+                key={i}
+                href="https://www.example.com"
+                className="p-2 rounded-full bg-slate-800 hover:bg-blue-600 transition text-slate-200"
+              >
+                <Icon className="w-5 h-5" />
+              </a>
+            ))}
+          </div>
+        </div>
       </footer>
     </div>
   );
@@ -197,8 +404,8 @@ function FeatureCard({ icon, title, desc, delay }: { icon: React.ReactNode, titl
       viewport={{ once: true }}
       variants={fadeInVariants}
       transition={{ delay }}
-      whileHover={{ y: -10 }}
-      className="p-10 bg-white rounded-3xl border border-slate-100 hover:border-blue-200 transition-colors shadow-sm"
+      whileHover={{ y: -8, scale: 1.02 }}
+      className="p-10 bg-white rounded-3xl border border-slate-100 hover:border-blue-200 transition-all shadow-sm hover:shadow-xl hover:shadow-blue-100/70"
     >
       <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
         {icon}
