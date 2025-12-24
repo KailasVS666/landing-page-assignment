@@ -62,6 +62,7 @@ export default function LandingPage() {
           </motion.div>
           <div className="hidden md:flex space-x-8 font-medium text-slate-600">
             <a href="#features" className="hover:text-blue-600 transition">Features</a>
+            <a href="#pricing" className="hover:text-blue-600 transition">Pricing</a>
             <a href="#stories" className="hover:text-blue-600 transition">Stories</a>
             <a href="#faq" className="hover:text-blue-600 transition">FAQ</a>
           </div>
@@ -118,6 +119,7 @@ export default function LandingPage() {
               <div className="flex flex-col gap-4 text-slate-700 font-semibold">
                 {[
                   { href: "#features", label: "Features" },
+                  { href: "#pricing", label: "Pricing" },
                   { href: "#stories", label: "Stories" },
                   { href: "#faq", label: "FAQ" },
                 ].map((item) => (
@@ -215,6 +217,95 @@ export default function LandingPage() {
               title="Flexible Learning"
               desc="Schedule sessions that fit your timeline and timezone effortlessly."
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="bg-white py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInVariants}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">Straightforward pricing</h2>
+            <p className="text-slate-500 text-lg">Choose a plan that matches where you are in your journey.</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Starter",
+                price: "$0",
+                cadence: "forever",
+                description: "Explore mentors, join community events, and get matched suggestions.",
+                features: ["Community access", "Mentor discovery", "1 saved mentor"],
+                cta: "Get Started",
+                highlight: false,
+              },
+              {
+                name: "Growth",
+                price: "$59",
+                cadence: "per month",
+                description: "Best for active learners who want consistent mentor time and projects.",
+                features: ["2 sessions / month", "Guided projects", "Interview prep tasks", "Unlimited saved mentors"],
+                cta: "Upgrade to Growth",
+                highlight: true,
+              },
+              {
+                name: "Pro",
+                price: "$149",
+                cadence: "per month",
+                description: "For job-ready candidates who need senior mentorship and portfolio polish.",
+                features: ["4 sessions / month", "Portfolio reviews", "Mock interviews", "Priority support"],
+                cta: "Talk to Sales",
+                highlight: false,
+              },
+            ].map((plan, idx) => (
+              <motion.div
+                key={plan.name}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeInVariants}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className={`relative rounded-3xl border ${plan.highlight ? "border-blue-200 bg-blue-50" : "border-slate-200 bg-white"} shadow-sm hover:shadow-xl hover:shadow-blue-100/60 transition-all p-8 flex flex-col gap-6`}
+              >
+                {plan.highlight && (
+                  <span className="absolute -top-3 right-6 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-blue-200">
+                    Most Popular
+                  </span>
+                )}
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-slate-900">{plan.name}</h3>
+                  <p className="text-slate-500 leading-relaxed">{plan.description}</p>
+                </div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-4xl font-extrabold text-slate-900">{plan.price}</span>
+                  <span className="text-slate-500">{plan.cadence}</span>
+                </div>
+                <ul className="space-y-3 text-slate-700">
+                  {plan.features.map((feat) => (
+                    <li key={feat} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-blue-600 mt-0.5" />
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+                <motion.a
+                  href={plan.name === "Pro" ? "/contact" : "/signup"}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`mt-auto inline-flex justify-center items-center gap-2 rounded-xl px-5 py-3 font-semibold transition shadow-md ${plan.highlight ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200" : "bg-slate-900 text-white hover:bg-slate-800 shadow-slate-300/60"}`}
+                >
+                  {plan.cta} <ArrowRight className="w-4 h-4" />
+                </motion.a>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
